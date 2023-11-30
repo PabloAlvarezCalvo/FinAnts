@@ -1,0 +1,66 @@
+form {
+  height: 100%;
+  width: 100%;
+}
+
+mat-form-field {
+  display: block;
+}
+
+.input-box {
+  gap: 10px;
+  display: flex;
+  justify-content: stretch;
+}
+.bot-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: space-evenly;
+  height: 45%;
+  width: 100%;
+}
+.have-account {
+  color: #5e636e;
+  display: flex;
+  gap: 5px;
+  font-size: 12px;
+}
+.sign-up-here {
+  color: black;
+  text-decoration-line: underline;
+}
+.sign-up-here:hover {
+  cursor: pointer;
+  color: rgb(63, 130, 133, 1);
+}
+.cont-submit-btn {
+  display: flex;
+  align-items: start;
+  justify-items: center;
+  width: 100%;
+}
+button.submit-btn {
+  color: white;
+  font-size: 1.1rem;
+  background-color: rgb(63, 130, 133);
+  height: 48px;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+button.submit-btn:hover {
+  background-color: rgb(63, 130, 133, 0.8);
+  box-shadow: 2px 2px 5px 0 rgba(63, 130, 133, 2);
+}
+
+.error-message {
+  font-size: smaller;
+  color: red;
+}
+
+.color-animation {
+  border: 1px solid red;
+  width: 100%;
+}

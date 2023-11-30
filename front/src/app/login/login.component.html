@@ -1,0 +1,100 @@
+<div class="full-page">
+  <div class="container-main-form">
+    <app-bocadillo></app-bocadillo>
+    <div class="container-form">
+      <app-animacion></app-animacion>
+      <div class="login-title">
+        <img src="../../assets/images/logo/login-title.png" alt="" />
+      </div>
+      <div class="animation-container">
+        <div class="flip-card" [class.flip]="showRegister">
+          <div class="flip-card-front">
+            <div class="inner inner-login">
+              <form
+                [formGroup]="loginForm"
+                (ngSubmit)="login()"
+                class="input-container"
+              >
+                <div class="top-form-container">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      #user
+                      placeholder="{{ 'USERNAME' | oTranslate }}"
+                      id="username"
+                      [formControl]="userCtrl"
+                      (input)="onUserInputChanged('input', $event.target.value)"
+                      (focus)="onUserInputChanged('focus', $event.target.value)"
+                      (blur)="onUserInputChanged('blur', $event.target.value)"
+                    />
+                    <mat-error *ngIf="userCtrl.hasError('required')">
+                      {{ "ERROR_USER_REQUIRED" | oTranslate }}
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <input
+                      matInput
+                      #password
+                      placeholder="{{ 'PASSWORD' | oTranslate }}"
+                      id="password"
+                      [formControl]="pwdCtrl"
+                      [type]="showPassword ? 'text' : 'password'"
+                      (input)="
+                        onUserInputChanged('passwordInput', $event.target.value)
+                      "
+                      (focus)="
+                        onUserInputChanged('passwordFocus', $event.target.value)
+                      "
+                      (blur)="
+                        onUserInputChanged('passwordBlur', $event.target.value)
+                      "
+                    />
+                    <mat-icon
+                      matSuffix
+                      class="icon-button login-input"
+                      (click)="togglePasswordVisibility()"
+                    >
+                      {{ showPassword ? "visibility" : "visibility_off" }}
+                    </mat-icon>
+                    <mat-error *ngIf="pwdCtrl.hasError('required')">
+                      {{ "ERROR_PASS_REQUIRED" | oTranslate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="bot-form-container">
+                  <div class="remeber_me dont-have-account">
+                    <!-- <mat-checkbox>{{ "REMEMBER_ME" | oTranslate }}</mat-checkbox> -->
+                    <p>
+                      {{ "DONT_HAVE_ACCOUNT" | oTranslate }}
+                    </p>
+                    <p (click)="showRegister = true" class="sign-up-here">
+                      {{ "SIGN_UP_HERE" | oTranslate }}
+                    </p>
+                  </div>
+                  <div class="cont-submit-btn">
+                    <button mat-raised-button type="submit" class="submit-btn">
+                      {{ "LOGIN" | oTranslate }}
+                    </button>
+                  </div>
+
+                  <div class="term-container">
+                    <p (click)="buttonTerms()">
+                      {{ "PRIVACY_POLICY" | oTranslate }}
+                    </p>
+                    <p (click)="buttonTerms()">
+                      {{ "TERMS_AND_CONDITIONS" | oTranslate }}
+                    </p>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <app-register (volverLogin)="showRegister = false"></app-register>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <button mat-raised-button (click)="showRegister = true">Registrarse</button> -->
+</div>

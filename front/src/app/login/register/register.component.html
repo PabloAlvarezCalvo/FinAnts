@@ -1,0 +1,73 @@
+<form #registryForm [formGroup]="loginForm" (ngSubmit)="register()" class="input-container inner">
+  <div>
+    <div class="input-box">
+      <mat-form-field fxFlex="170px">
+        <input matInput #name placeholder="{{ 'NAME' | oTranslate }}" type="text" name="name" id="name"
+          [formControl]="nameCtrl" (input)="onUserInputChanged('input', $event.target.value)"
+          (focus)="onUserInputChanged('focus', $event.target.value)"
+          (blur)="onUserInputChanged('blur', $event.target.value)" />
+        <mat-error *ngIf="nameCtrl.hasError('required')">
+          {{ "ERROR_NAME_REQUIRED" | oTranslate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="170px">
+        <input matInput #lastname placeholder="{{ 'LASTNAME' | oTranslate }}" type="text" name="lastname" id="lastname"
+          [formControl]="lastnameCtrl" (input)="onUserInputChanged('rightInput', $event.target.value)"
+          (focus)="onUserInputChanged('rightFocus', $event.target.value)"
+          (blur)="onUserInputChanged('rightBlur', $event.target.value)" />
+        <mat-error *ngIf="lastnameCtrl.hasError('required')">
+          {{ "ERROR_LASTNAME_REQUIRED" | oTranslate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-box">
+      <mat-form-field fxFlex="350px">
+        <input matInput #email placeholder="{{ 'EMAIL' | oTranslate }}" type="email" name="email" id="email"
+          [formControl]="emailCtrl" (input)="onUserInputChanged('input', $event.target.value)"
+          (focus)="onUserInputChanged('focus', $event.target.value)"
+          (blur)="onUserInputChanged('blur', $event.target.value)" />
+        <mat-error *ngIf="emailCtrl.hasError('required')">
+          {{ "ERROR_EMAIL_REQUIRED" | oTranslate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-box">
+      <mat-form-field fxFlex="170px">
+        <input matInput #user placeholder="{{ 'USERNAME' | oTranslate }}" id="username" [formControl]="userCtrl"
+          (input)="onUserInputChanged('input', $event.target.value)"
+          (focus)="onUserInputChanged('focus', $event.target.value)"
+          (blur)="onUserInputChanged('blur', $event.target.value)" />
+        <mat-error *ngIf="userCtrl.hasError('required')">
+          {{ "ERROR_USER_REQUIRED" | oTranslate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="170px">
+        <input matInput #password type="password" placeholder="{{ 'PASSWORD' | oTranslate }}" id="password"
+          [formControl]="pwdCtrl" [type]="showPassword ? 'text' : 'password'" minlength="8"
+          (input)="onUserInputChanged('passwordRightInput', $event.target.value)"
+          (focus)="onUserInputChanged('passwordRightFocus', $event.target.value)"
+          (blur)="onUserInputChanged('passwordRightBlur', $event.target.value)" />
+        <mat-icon matSuffix class="icon-button login-input" (click)="togglePasswordVisibility()">
+          {{ showPassword ? "visibility" : "visibility_off" }}
+        </mat-icon>
+        <mat-error *ngIf="pwdCtrl.hasError('required')">
+          {{ "ERROR_PASS_REQUIRED" | oTranslate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="bot-form-container">
+    <div (click)="volverAlLogin()" class="have-account">
+      <p>
+        {{ "ALREADY_HAVE_ACCOUNT" | oTranslate }}
+      </p>
+      <p class="sign-up-here">{{ "SIGN_IN" | oTranslate }}</p>
+    </div>
+    <div class="cont-submit-btn">
+      <button mat-raised-button type="submit" class="submit-btn">
+        {{ "REGISTER" | oTranslate }}
+      </button>
+    </div>
+  </div>
+</form>

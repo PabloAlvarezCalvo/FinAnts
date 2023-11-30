@@ -1,0 +1,313 @@
+:root {
+  --var-color-blue: #83af9b;
+  --var-color-green: #c8c8a9;
+  --var-color-brown: #774f38;
+  --var-color-beige: #ece5ce;
+  --var-color-yellow: #f9cdad;
+  --var-color-pink: #fe4365;
+}
+
+.full-page {
+  position: relative;
+  background-color: #f4f4f4;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+//AQUI EMPIEZA EL BOCADILLO DE COMIC
+
+.message-box {
+  transform: translatey(0px);
+
+  animation: float 5s ease-in-out infinite;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 3px;
+  font-size: 10px;
+  max-width: 50%;
+  max-height: 20px;
+  margin-bottom: 5px;
+  overflow-wrap: break-word;
+  color: var(--var-color-brown);
+  background-color: var(--var-color-beige);
+  padding: 30px 50px 75px 50px;
+  border-radius: 11px;
+  position: relative;
+  right: 201px;
+  bottom: 77px;
+  box-shadow: 20px 20px var(--var-color-blue);
+  font-family: "Baloo 2", cursive;
+  //opacity: 0;
+}
+.message-box::after {
+  transform: translatey(0px);
+  animation: float2 5s ease-in-out infinite;
+  content: ".";
+  font-weight: bold;
+  -webkit-text-fill-color: var(--var-color-beige);
+  text-shadow: 22px 22px var(--var-color-blue);
+  text-align: right;
+  font-size: 55px;
+  width: 55px;
+  height: 11px;
+  line-height: 30px;
+  border-radius: 11px;
+  background-color: var(--var-color-beige);
+  position: absolute;
+  display: block;
+  bottom: -30px;
+  left: 274px;
+  box-shadow: 22px 22px var(--var-color-blue);
+  z-index: -2;
+}
+
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-20px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+
+@keyframes float2 {
+  0% {
+    line-height: 30px;
+    transform: translatey(0px);
+  }
+  55% {
+    transform: translatey(-20px);
+  }
+  60% {
+    line-height: 10px;
+  }
+  100% {
+    line-height: 30px;
+    transform: translatey(0px);
+  }
+}
+
+//AQUI TERMINA EL BOCADILLO DE COMIC
+
+.container-main-form {
+  position: relative;
+  width: 500px;
+  height: 630px;
+  display: grid;
+  grid-template-rows: 10px 1fr;
+  border-radius: 10px;
+  background-color: rgba(145, 192, 158, 0.5);
+  box-shadow: 2px 2px 5px 0 rgba(145, 192, 158, 1);
+}
+.container-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.right-eye {
+  position: absolute;
+  right: 164px;
+  top: 78px;
+  bottom: 0;
+  transition: transform 0.3s ease;
+}
+.left-eye {
+  position: absolute;
+  right: 106px;
+  top: 89px;
+  bottom: 0;
+  transition: transform 0.3s ease;
+}
+.input-container {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.container-main-form .mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: rgb(63, 130, 133);
+}
+.container-main-form .mat-input-element {
+  caret-color: rgb(63, 130, 133) !important;
+}
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: rgb(63, 130, 133);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+mat-icon.login-input {
+  cursor: pointer;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: rgb(63, 130, 133);
+}
+.cont-submit-btn {
+  display: flex;
+  align-items: start;
+  justify-items: center;
+  width: 100%;
+}
+.dont-have-account {
+  color: #5e636e;
+  display: flex;
+  gap: 5px;
+  font-size: 12px;
+}
+.sign-up-here {
+  color: black;
+  text-decoration-line: underline;
+}
+.sign-up-here:hover {
+  cursor: pointer;
+  color: rgb(63, 130, 133, 1);
+}
+
+button.submit-btn {
+  color: white;
+  font-size: 1.1rem;
+  background-color: rgb(63, 130, 133);
+  height: 48px;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+button.submit-btn:hover {
+  background-color: rgb(63, 130, 133, 0.8);
+  box-shadow: 2px 2px 5px 0 rgba(63, 130, 133, 2);
+}
+.term-container {
+  display: flex;
+  font-size: 12px;
+}
+.term-container p {
+  text-align: center;
+  text-decoration: underline;
+  margin: 5px;
+  cursor: pointer;
+  color: #5e636e;
+  transition: color 0.3s;
+}
+.term-container p:hover {
+  color: rgb(63, 130, 133);
+}
+.top-form-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 55%;
+}
+.bot-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: space-evenly;
+  height: 45%;
+}
+//ANIMACIÓN FORMULARIO
+.animation-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 65%;
+  width: 70%;
+}
+.flip-car {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+.inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.flip-card-front,
+.flip-card-back {
+  width: 350px;
+  min-height: 390px;
+  height: auto;
+  background-color: #c2d9c8;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.flip-card-front {
+  transform: rotateY(0deg);
+}
+.flip-card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+}
+.flip-card-front::after,
+.flip-card-back::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.flip-card-front .inner,
+.flip-card-back .inner {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateZ(60px);
+  z-index: 2;
+}
+.flip-card-front .inner-login {
+  top: 40%;
+}
+.flip-card.flip .flip-card-front {
+  transform: rotateY(-180deg);
+}
+.flip-card.flip .flip-card-back {
+  transform: rotateY(0deg);
+}
+
+@media (max-width: 790px) {
+  .container-main-form {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0px;
+    box-shadow: none;
+  }
+  .term-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
