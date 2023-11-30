@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JdbcEntitySetup
+        xmlns="http://www.ontimize.com/schema/jdbc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ontimize.com/schema/jdbc http://www.ontimize.com/schema/jdbc/ontimize-jdbc-dao.xsd"
+        catalog="" schema="${mainschema}" table="CATEGORIES"
+        datasource="mainDataSource" sqlhandler="dbSQLStatementHandler">
+    <DeleteKeys>
+        <Column>CA_ID</Column>
+    </DeleteKeys>
+    <UpdateKeys>
+        <Column>CA_ID</Column>
+    </UpdateKeys>
+    <GeneratedKey>ca_id</GeneratedKey>
+    <Queries>
+        <Query id="categoriesExpenses">
+            <Sentence>
+                <![CDATA[
+                    SELECT
+                        #COLUMNS#
+                    FROM
+                        ${mainschema}.CATEGORIES
+                    WHERE CA_ISEXPENSES = true
+                    ORDER BY
+                    CA_NAME ASC
+                ]]>
+            </Sentence>
+        </Query>
+        <Query id="categoriesIncomes">
+            <Sentence>
+                <![CDATA[
+                    SELECT
+                        #COLUMNS#
+                    FROM
+                        ${mainschema}.CATEGORIES
+                    WHERE CA_ISINCOMES = true
+                    ORDER BY
+                    CA_NAME ASC
+                ]]>
+            </Sentence>
+        </Query>
+    </Queries>
+
+
+</JdbcEntitySetup>
