@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JdbcEntitySetup
+        xmlns="http://www.ontimize.com/schema/jdbc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ontimize.com/schema/jdbc http://www.ontimize.com/schema/jdbc/ontimize-jdbc-dao.xsd"
+        catalog="" schema="${mainschema}" table="MOVEMENTS"
+        datasource="mainDataSource" sqlhandler="dbSQLStatementHandler">
+    <DeleteKeys>
+        <Column>MOV_ID</Column>
+    </DeleteKeys>
+    <UpdateKeys>
+        <Column>MOV_ID</Column>
+    </UpdateKeys>
+    <GeneratedKey>mov_id</GeneratedKey>
+
+<Queries>
+
+    <Query id="totalMovementsForCurrentMonth">
+    <Sentence>
+        <![CDATA[
+                WITH TOTAL_MOVEMENTS AS
+                (
+                SELECT
+                SUM(MOV_AMOUNT) AS MOV_TOTAL_AMOUNT,
+                USER_,
+                EXTRACT(MONTH FROM MOV_DATE) as  MOV_MONTH,
+                EXTRACT(YEAR FROM MOV_DATE) as MOV_YEAR,
+                MOV_AMOUNT
+                FROM
+                MOVEMENTS
+                GROUP BY
+                USER_,
+                EXTRACT(MONTH FROM MOV_DATE),
+                EXTRACT(YEAR FROM MOV_DATE)
+                )
+                SELECT
+                   #COLUMNS#
+                 FROM
+                    TOTAL_MOVEMENTS
+                 #WHERE#
+        ]]>
+
+    </Sentence>
+    </Query>
+    <Query id="totalIncomesForCurrentMonth">
+        <Sentence>
+            <![CDATA[
+                     WITH AMOUNT_INCOMES AS
+                (
+                    SELECT
+                        MOV_AMOUNT,
+                        USER_,
+                        MOV_DATE
+                    FROM
+                        ${mainschema}.MOVEMENTS
+
+                     WHERE
+                        MOV_AMOUNT >=0
+                     )
+                SELECT
+                    sum(MOV_AMOUNT) as incomeBalance
+                 FROM
+                    AMOUNT_INCOMES
+                WHERE
+                     EXTRACT(MONTH FROM MOV_DATE) = EXTRACT(MONTH FROM CURRENT_DATE) AND
+                     EXTRACT(YEAR FROM MOV_DATE) =  EXTRACT(YEAR FROM CURRENT_DATE)
+                     AND USER_ = ?
+        ]]>
+        </Sentence>
+    </Query>
+
+    <Query id="totalExpensesForCurrentMonth">
+        <Sentence>
+            <![CDATA[
+           WITH AMOUNT_EXPENSES AS
+                (
+                    SELECT
+                        MOV_AMOUNT,
+                        USER_,
+                        MOV_DATE
+                    FROM
+                        ${mainschema}.MOVEMENTS
+                    WHERE
+                        MOV_AMOUNT <0
+                     )
+                SELECT
+                    sum(MOV_AMOUNT) as expenseBalance
+                 FROM
+                    AMOUNT_EXPENSES
+                WHERE
+                     EXTRACT(MONTH FROM MOV_DATE) = EXTRACT(MONTH FROM CURRENT_DATE)
+                AND
+                     EXTRACT(YEAR FROM MOV_DATE) =  EXTRACT(YEAR FROM CURRENT_DATE)
+
+                AND
+                    USER_ = ?
+        ]]>
+        </Sentence>
+    </Query>
+
+    <Query id="totalExpensesAmountDay">
+        <Sentence>
+            <![CDATA[
+                WITH SUM_TABLE AS (
+                    SELECT
+                        ABS(SUM(MOV_AMOUNT)) AS SUM_AMOUNT,
+                        TO_CHAR(MOV_DATE, 'YYYY-MM-DD') AS DATE_SUM_AMOUNT,
+                        USER_,
+                        EXTRACT(MONTH FROM MOV_DATE) as  MOV_MONTH,
+                        EXTRACT(YEAR FROM MOV_DATE) as MOV_YEAR
+                    FROM
+                        ${mainschema}.MOVEMENTS
+                    WHERE
+                        MOV_AMOUNT < 0
+                    GROUP BY
+                        DATE_SUM_AMOUNT,
+                        USER_,
+                        MOV_MONTH,
+                        MOV_YEAR
+                    ORDER BY
+                        DATE_SUM_AMOUNT
+                )
+                SELECT
+                    #COLUMNS#
+                FROM
+                    SUM_TABLE
+                #WHERE#
+           ]]>
+
+        </Sentence>
+    </Query>
+
+    <Query id="totalIncomesAmountDay">
+        <Sentence>
+            <![CDATA[
+                WITH SUM_TABLE AS (
+                    SELECT
+                        SUM(MOV_AMOUNT) AS SUM_AMOUNT,
+                        TO_CHAR(MOV_DATE, 'YYYY-MM-DD') AS DATE_SUM_AMOUNT,
+                        USER_,
+                        EXTRACT(MONTH FROM MOV_DATE) as  MOV_MONTH,
+                        EXTRACT(YEAR FROM MOV_DATE) as MOV_YEAR
+                    FROM
+                        ${mainschema}.MOVEMENTS
+                    WHERE
+                        MOV_AMOUNT >= 0
+                    GROUP BY
+                        DATE_SUM_AMOUNT,
+                        USER_,
+                        MOV_MONTH,
+                        MOV_YEAR
+                    ORDER BY
+                        DATE_SUM_AMOUNT
+                )
+                SELECT
+                    #COLUMNS#
+                FROM
+                    SUM_TABLE
+                #WHERE#
+           ]]>
+
+        </Sentence>
+    </Query>
+
+    <Query id="expensesForCategories">
+        <AmbiguousColumns>
+            <AmbiguousColumn name="CA_ID" prefix="mov_filtered" />
+            <AmbiguousColumn name="CA_ID" prefix="ca" />
+            <AmbiguousColumn name="GR_ID" prefix="gr" />
+        </AmbiguousColumns>
+        <Sentence>
+            <![CDATA[
+                    SELECT #COLUMNS#
+                    FROM
+                        (SELECT
+                            MOV_ID,
+                            MOV_CONCEPT,
+                            ABS(MOV_AMOUNT) MOV_AMOUNT,
+                            MOV_DATE,
+                            CA_ID,
+                            USER_,
+                            GR_ID
+                        FROM
+                            ${mainschema}.MOVEMENTS
+                        WHERE
+                            MOV_AMOUNT < 0) AS mov_filtered
+                        LEFT JOIN
+                            ${mainschema}.CATEGORIES ca
+                        ON
+                        mov_filtered.CA_ID = ca.CA_ID
+                        LEFT JOIN
+                            ${mainschema}.GROUPS gr
+                        ON
+                        mov_filtered.GR_ID = gr.GR_ID
+
+                    #WHERE#
+
+
+                ]]>
+        </Sentence>
+    </Query>
+
+    <Query id="incomesForCategories">
+        <AmbiguousColumns>
+            <AmbiguousColumn name="CA_ID" prefix="mov_filtered" />
+            <AmbiguousColumn name="CA_ID" prefix="ca" />
+            <AmbiguousColumn name="GR_ID" prefix="gr" />
+        </AmbiguousColumns>
+        <Sentence>
+            <![CDATA[
+                    SELECT #COLUMNS#
+                    FROM
+                        (SELECT
+                            *
+                        FROM
+                            ${mainschema}.MOVEMENTS
+                        WHERE
+                            MOV_AMOUNT >= 0) AS mov_filtered
+                        LEFT JOIN
+                            ${mainschema}.CATEGORIES ca
+                        ON
+                        mov_filtered.CA_ID = ca.CA_ID
+                         LEFT JOIN
+                            ${mainschema}.GROUPS gr
+                        ON
+                        mov_filtered.GR_ID = gr.GR_ID
+                    #WHERE#
+                ]]>
+        </Sentence>
+    </Query>
+
+    <Query id="balance">
+        <Sentence>
+            <![CDATA[
+            WITH BALANCE_TOTAL AS(
+            WITH BALANCE AS
+                (
+                    SELECT
+                        MOV_AMOUNT,
+                        USER_,
+                        MOV_DATE,
+                        EXTRACT(MONTH FROM MOV_DATE) AS MONTH,
+                        EXTRACT(YEAR FROM MOV_DATE) AS YEAR
+                    FROM
+                        ${mainschema}.MOVEMENTS
+                     )
+                SELECT
+                    sum(MOV_AMOUNT)as balance,
+                    USER_,
+                    MONTH,
+                    YEAR
+
+                 FROM
+                    BALANCE
+                 GROUP BY
+                    USER_,
+                    MONTH,
+                    YEAR
+                )
+                SELECT
+                    #COLUMNS#
+                FROM
+                    BALANCE_TOTAL
+                    #WHERE#
+        ]]>
+
+        </Sentence>
+    </Query>
+
+    <Query id="incomeBalance">
+        <Sentence>
+            <![CDATA[
+            WITH INCOMEBALANCE AS
+                (
+                    SELECT
+                    SUM(MOV_AMOUNT) AS INCOMEBALANCE,
+                    USER_
+                    FROM ${mainschema}.MOVEMENTS
+                    WHERE MOV_AMOUNT > 0
+                    GROUP BY
+                    USER_
+                     )
+                SELECT
+                   #COLUMNS#
+                 FROM
+                    INCOMEBALANCE
+                #WHERE#
+        ]]>
+        </Sentence>
+    </Query>
+
+    <Query id="totalExpensesForCategories">
+        <AmbiguousColumns>
+            <AmbiguousColumn name="GR_ID" prefix="gr" />
+        </AmbiguousColumns>
+        <Sentence>
+            <![CDATA[
+                WITH  TOTAL_EXPENSES_CATEGORY AS (
+                    SELECT
+                        ca.CA_ID,
+                        ca.CA_NAME,
+                        MOV_MONTH,
+                        MOV_YEAR,
+                        USER_,
+                        SUM(mov_filtered.MOV_AMOUNT) AS TOTAL_SPENT
+                    FROM
+                    (
+                        SELECT
+                            MOV_ID,
+                            MOV_CONCEPT,
+                            ABS(MOV_AMOUNT) MOV_AMOUNT,
+                            MOV_DATE,
+                            CA_ID category,
+                            USER_,
+                            EXTRACT(MONTH FROM MOV_DATE) as MOV_MONTH,
+                            EXTRACT(YEAR FROM MOV_DATE) as MOV_YEAR,
+                            GR_ID
+                        FROM
+                            MOVEMENTS
+                        WHERE
+                            MOV_AMOUNT < 0
+                    ) AS mov_filtered
+                    LEFT JOIN
+                        CATEGORIES ca
+                    ON
+                        category = ca.CA_ID
+                    GROUP BY
+                        USER_,
+                        ca.CA_ID,
+                        ca.CA_NAME,
+                        mov_filtered.MOV_MONTH,
+                        mov_filtered.MOV_YEAR
+                )
+                SELECT
+                    #COLUMNS#
+                FROM
+                    TOTAL_EXPENSES_CATEGORY
+                #WHERE#
+            ]]>
+
+        </Sentence>
+    </Query>
+
+</Queries>
+
+</JdbcEntitySetup>
