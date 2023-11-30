@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JdbcEntitySetup
+        xmlns="http://www.ontimize.com/schema/jdbc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ontimize.com/schema/jdbc http://www.ontimize.com/schema/jdbc/ontimize-jdbc-dao.xsd"
+        catalog="" schema="${mainschema}" table="GROUPS"
+        datasource="mainDataSource" sqlhandler="dbSQLStatementHandler">
+    <DeleteKeys>
+        <Column>GR_ID</Column>
+    </DeleteKeys>
+    <UpdateKeys>
+        <Column>GR_ID</Column>
+    </UpdateKeys>
+    <GeneratedKey>gr_id</GeneratedKey>
+    <Queries>
+        <Query id="groupsByMember">
+            <AmbiguousColumns>
+                <AmbiguousColumn name="GR_ID" prefix="g"/>
+            </AmbiguousColumns>
+            <Sentence>
+                <![CDATA[
+                    SELECT
+                        #COLUMNS#
+                    FROM
+                        ${mainschema}.GROUPS g
+                    INNER JOIN
+                        ${mainschema}.MEMBER_GROUP mg
+                    ON
+                        g.GR_ID = mg.GR_ID
+                    #WHERE#
+                    #ORDER#
+                ]]>
+            </Sentence>
+        </Query>
+        <Query id="getGroupMembers">
+            <AmbiguousColumns>
+                <AmbiguousColumn name="GR_ID" prefix="GROUP_DATA" />
+            </AmbiguousColumns>
+            <Sentence>
+                <![CDATA[
+                    WITH GROUP_DATA AS (
+                        SELECT
+                            g.GR_ID,
+                            g.GR_NAME,
+                            g.GR_CREATION_DATE,
+                            mg.MG_ID,
+                            t.USER_,
+                            mg.MG_IS_ADMIN
+                        FROM
+                            ${mainschema}.GROUPS g
+                        INNER JOIN
+                            ${mainschema}.MEMBER_GROUP mg
+                        ON
+                            g.GR_ID = mg.GR_ID
+                        INNER JOIN
+                            TUSER t
+                        ON
+                            t.USER_ = mg.USER_
+                    )
+                    SELECT
+                        #COLUMNS#
+                    FROM
+                        GROUP_DATA
+                    #WHERE#
+                ]]>
+            </Sentence>
+        </Query>
+        <Query id="groupMembersWithBalance">
+            <AmbiguousColumns>
+                <AmbiguousColumn name="GR_ID" prefix="g" />
+            </AmbiguousColumns>
+            <Sentence>
+                <![CDATA[
+                    WITH GROUP_MEMBERS_EXPENSES as (
+                        SELECT
+                            mg.MG_ID,
+                            mg.USER_,
+                            COALESCE(SUM(m.MOV_AMOUNT), 0) EXPENSES
+                        FROM
+                            GROUPS g
+                        INNER JOIN
+                            MEMBER_GROUP mg
+                        ON
+                            g.GR_ID = mg.GR_ID
+                        LEFT JOIN
+                            MOVEMENTS m
+                        ON
+                            mg.USER_ = m.USER_
+                        #WHERE#
+                        GROUP BY
+                            mg.USER_,
+                            mg.MG_ID
+                    ),
+
+                    GROUP_BALANCE AS (
+                        SELECT
+                            SUM(EXPENSES) / (SELECT COUNT(USER_) FROM GROUP_MEMBERS_EXPENSES gm) USER_TOTAL
+                        FROM GROUP_MEMBERS_EXPENSES gme
+                    ),
+
+                    MEMBER_BALANCE AS (
+                        SELECT
+                            me.MG_ID,
+                            me.user_,
+                            (
+                                SELECT
+                                    gb.USER_TOTAL
+                                FROM
+                                    GROUP_BALANCE gb
+                            ) - me.EXPENSES MEMBER_BALANCE
+                        from
+                            GROUP_MEMBERS_EXPENSES me
+                    )
+
+                    SELECT
+                        #COLUMNS#
+                    FROM
+                        MEMBER_BALANCE mb;
+                ]]>
+            </Sentence>
+        </Query>
+        <Query id="groupMovements">
+            <Sentence>
+                <![CDATA[
+                    SELECT
+                        #COLUMNS#
+                    FROM
+                        MOVEMENTS m
+                    #WHERE#
+                ]]>
+            </Sentence>
+        </Query>
+    </Queries>
+</JdbcEntitySetup>

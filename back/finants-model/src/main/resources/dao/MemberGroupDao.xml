@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JdbcEntitySetup
+        xmlns="http://www.ontimize.com/schema/jdbc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ontimize.com/schema/jdbc http://www.ontimize.com/schema/jdbc/ontimize-jdbc-dao.xsd"
+        catalog="" schema="${mainschema}" table="MEMBER_GROUP"
+        datasource="mainDataSource" sqlhandler="dbSQLStatementHandler">
+    <DeleteKeys>
+        <Column>MG_ID</Column>
+    </DeleteKeys>
+    <UpdateKeys>
+        <Column>MG_ID</Column>
+    </UpdateKeys>
+    <GeneratedKey>mg_id</GeneratedKey>
+    <Queries>
+        <Query id="getMgIdFromMemberGroup">
+            <Sentence>
+                <![CDATA[
+                    SELECT
+                        mg.MG_ID
+                    FROM
+                        ${mainschema}.MEMBER_GROUP
+                    #WHERE#
+                ]]>
+            </Sentence>
+        </Query>
+    </Queries>
+</JdbcEntitySetup>
