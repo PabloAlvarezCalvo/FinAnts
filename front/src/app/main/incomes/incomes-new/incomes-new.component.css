@@ -1,0 +1,22 @@
+.container-close-button {
+  position: relative;
+  height: 20px;
+  width: 100%;
+}
+
+.close-button {
+  position: absolute;
+  border: none;
+  width: 30px;
+  height: 30px;
+  top: -10px;
+  right: -10px;
+  background-color: transparent;
+  cursor: pointer;
+  color: rgb(145, 192, 158);
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(145, 192, 158, 1);
+}
+.close-button:hover {
+  background-color: rgba(145, 192, 158, 0.2);
+}

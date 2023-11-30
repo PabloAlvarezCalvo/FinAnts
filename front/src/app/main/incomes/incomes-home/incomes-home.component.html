@@ -1,0 +1,75 @@
+<div class="incomes-home-container">
+  <div class="filter-container filter-container-income">
+    <o-form editable-detail="no" show-header="no" class="form-filter-container-income">
+      <div class="items-filter">
+        <div class="inputs-filter">
+          <o-daterange-input attr="daterange" fxFlex="20" label="{{ 'INPUT.BUTTON.DATERANGE' | oTranslate }}"
+            read-only="no" required="no" show-ranges="true" format="DD/MM/YYYY" touch-ui="yes" mode="auto" fxFlex="50">
+          </o-daterange-input>
+          <o-combo id="combo" attr="CA_ID" label="{{ 'CATEGORIES' | oTranslate }}" fxFlex="50" read-only="no"
+            service="categories" entity="categoriesIncomes" keys="CA_ID" columns="CA_ID;CA_NAME"
+            visible-columns="CA_NAME" value-column="CA_ID" multiple="true" required="no" searchable="true"
+            class="combo-padding combo"></o-combo>
+        </div>
+        <div class="formButtonIncome btn-filter">
+          <o-button attr="filter" [oFilterBuilderQuery]="filterBuilder" type="RAISED"
+            label="{{ 'FILTER' | oTranslate }}">
+          </o-button>
+          <o-button attr="clear" [oFilterBuilderClear]="filterBuilder" type="RAISED" label="{{ 'CLEAR' | oTranslate }}"
+            (onClick)="clearFilters()">
+          </o-button>
+        </div>
+      </div>
+
+
+      <div>
+        <o-filter-builder #filterBuilder attr="thefilter" filters="date_range2:daterange;CA_ID:CA_ID"
+          [target]="incomeTable" query-on-change="no" query-on-change-delay="300"
+          [expression-builder]="createFilter"></o-filter-builder>
+      </div>
+
+
+    </o-form>
+  </div>
+  <!--Tabla y chart-->
+  <div class="table-chart-container">
+    <!--Tabla-->
+    <div class="table-container">
+      <div class="table-title">
+        <h3>{{'INCOME_LIST' | oTranslate }}</h3>
+      </div>
+      <div class="income-table">
+        <o-form-layout-manager mode="dialog">
+          <o-form-layout-dialog-options width="880px" height="580px"></o-form-layout-dialog-options>
+          <o-table #incomeTable attr="incomeTable" service="movements" entity="incomesForCategories" keys="MOV_ID"
+            columns="MOV_ID;MOV_CONCEPT;MOV_AMOUNT;MOV_DATE;CA_ID;USER_;CA_ID;CA_NAME;GR_ID;GR_NAME"
+            visible-columns="CA_NAME;MOV_CONCEPT;MOV_AMOUNT;MOV_DATE;GR_NAME" virtual-scroll="no" delete-button="no"
+            refresh-button="false" (onDataLoaded)="dataFiltered($event)" sort-columns="MOV_DATE:DESC" resizable="false">
+            <o-table-paginator page-size-options="14"></o-table-paginator>
+            <o-table-column attr="CA_NAME" title="CATEGORY" content-align="center"></o-table-column>
+            <o-table-column attr="MOV_CONCEPT" title="CONCEPT" content-align="center"></o-table-column>
+            <o-table-column attr="MOV_AMOUNT" title="AMOUNT" type="currency" currency-symbol="€"
+              currency-symbol-position="right" content-align="center"></o-table-column>
+            <o-table-column attr="MOV_DATE" title="DATE" type="date" format="L"></o-table-column>
+            <o-table-column attr="GR_NAME" title="GR_GROUP" content-align="center"></o-table-column>
+          </o-table>
+        </o-form-layout-manager>
+      </div>
+    </div>
+
+    <!--Chart-->
+    <div class="chart-container">
+      <div class="table-title">
+        <h3>{{'INCOMES_CHART' | oTranslate }}</h3>
+      </div>
+      <div class="income-table">
+        <app-incomes-chart *ngIf="showChart; else showMessage"
+          [sharedDataObject]="sharedDataObject"></app-incomes-chart>
+        <ng-template #showMessage>
+          <p>{{"CHART_FILTER_BY_COLUMN.EMPTY_VALUE" | oTranslate}}</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,46 @@
+<div class="container-close-button" *ngIf="data.showCloseButton">
+  <button *ngIf="data.showCloseButton" (click)="closeDialog()" class="close-button">X</button>
+</div>
+<div mat-dialog-content>
+  <o-form #newIncome class="text-detail-incomes expenses-form-new-buttons" service="movements" entity="movement"
+    keys="MOV_ID" header-actions="I" show-header-navigation="no" emitEvent="false" changeType="0"
+    label-header="INCOMES_FORM" (onFormModeChange)="addCurrentDate($event)"
+    [confirm-exit]="(userHasMadeChanges) ? 'yes' : 'no'" (click)="resetCurrentDate($event)"
+    (onFormModeChange)="forceInsertMode($event)" ignore-default-navigation="true">
+    <div o-form-toolbar-buttons class="btn-cancel-cont">
+      <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onClickCustomButtonCancel()">
+        <mat-icon>close</mat-icon>
+        <span>{{"CANCEL" | oTranslate}}</span>
+      </button>
+    </div>
+    <o-column>
+      <o-row>
+        <div fxFlex fxLayout="column" fxLayoutAlign="space-around stretch">
+          <div class="inputs-container-form">
+            <o-date-input #dateInput attr="MOV_DATE" label="DATE" fxFlex="45"
+              (onChange)="onUserChange()"></o-date-input>
+
+            <o-currency-input class="input-padding" attr="MOV_AMOUNT" label="AMOUNT" fxFlex="45" required="yes"
+              [validators]="validatorAmount" (onChange)="onUserChange()">
+              <o-validator error-name="negativeNumber" error-text="NONEGATIVE"></o-validator>
+            </o-currency-input>
+          </div>
+          <div class="inputs-container-form">
+            <o-text-input class="input-padding" attr="MOV_CONCEPT" label="CONCEPT" fxFlex="93" required="yes"
+              max-length="30" (onChange)="onUserChange()"></o-text-input>
+          </div>
+          <div class="inputs-container-form">
+            <o-combo attr="CA_ID" label="CATEGORY" class="input-padding" fxFlex="45" service="categories"
+              entity="categoriesIncomes" keys="CA_ID" columns="CA_ID;CA_NAME" visible-columns="CA_NAME"
+              value-column="CA_ID" multiple="false" required="yes" (onChange)="onUserChange()" null-selection="false"
+              searchable="true"></o-combo>
+            <o-combo attr="GR_ID" label="GROUPS_OPTIONAL" class="input-padding" service="groups" entity="groupsByMember"
+              keys="GR_ID" columns="GR_ID;GR_NAME;GR_CREATION_DATE" visible-columns="GR_NAME" value-column="GR_ID"
+              multiple="false" required="no" fxFlex="45" (onChange)="onUserChange()" searchable="true">
+            </o-combo>
+          </div>
+        </div>
+      </o-row>
+    </o-column>
+  </o-form>
+</div>

@@ -1,0 +1,30 @@
+<o-form #incomeTable class="incomes-detail-table text-detail-incomes" attr="incomesDetailsTable" service="movements"
+  entity="incomesForCategories" header-actions="U;D" keys="MOV_ID" show-header="true" parent-keys="MOV_ID"
+  keys-sql-types="INTEGER" label-header="INCOMES_DETAILS" show-header-navigation="yes" (onUpdate)="onUpdate()">
+  <o-column>
+    <o-row>
+      <div fxFlex fxLayout="column" fxLayoutAlign="space-around stretch">
+        <div class="inputs-container-form">
+          <o-date-input class="text-detail-incomes" attr="MOV_DATE" label="DATE" fxFlex="45" content-align="center"
+            required="yes"></o-date-input>
+          <o-currency-input attr="MOV_AMOUNT" label="AMOUNT" [validators]="validatorAmount" required="yes" fxFlex="45">
+            <o-validator error-name="negativeNumber" error-text="NONEGATIVE" required="yes"></o-validator>
+          </o-currency-input>
+        </div>
+        <div class="inputs-container-form">
+          <o-text-input class="text-detail-incomes" attr="MOV_CONCEPT" label="CONCEPT" content-align="center"
+            required="yes" fxFlex="93"></o-text-input>
+        </div>
+        <div class="inputs-container-form">
+          <o-combo attr="CA_ID" label="CATEGORY" service="categories" entity="categoriesIncomes" keys="CA_ID"
+            columns="CA_ID;CA_NAME" visible-columns="CA_NAME" value-column="CA_ID" multiple="false" required="yes"
+            fxFlex="45" null-selection="false" searchable="true"></o-combo>
+          <o-combo attr="GR_ID" label="GROUPS_OPTIONAL" service="groups" entity="groupsByMember" keys="GR_ID"
+            columns="GR_ID;GR_NAME;GR_CREATION_DATE" visible-columns="GR_NAME" value-column="GR_ID" multiple="false"
+            required="no" fxFlex="45" searchable="true">
+          </o-combo>
+        </div>
+      </div>
+    </o-row>
+  </o-column>
+</o-form>
