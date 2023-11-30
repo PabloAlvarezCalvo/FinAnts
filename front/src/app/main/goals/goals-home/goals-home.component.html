@@ -1,0 +1,44 @@
+<!--Tabla y chart-->
+<div class="table-chart-container">
+  <!--Tabla-->
+  <div class="table-container">
+    <div class="table-title">
+      <h3>{{'GOALS_LIST' | oTranslate }}</h3>
+    </div>
+    <div class="goal-table">
+      <o-form-layout-manager mode="dialog">
+        <o-form-layout-dialog-options width="880px" height="580px"></o-form-layout-dialog-options>
+        <o-table #goalTable class="goal-table" attr="goalTable" service="goals" entity="goalsWithExpense" keys="GO_ID"
+          columns="GO_NAME;USER_;GO_AMOUNT;CA_ID;TOTAL_EXPENSE;PERCENTAGE_EXPENSE;CA_NAME"
+          visible-columns="GO_NAME;CA_NAME;GO_AMOUNT;PERCENTAGE_MOV_TO_GO;TOTAL_EXPENSE;PERCENTAGE_EXPENSE"
+          virtual-scroll="no" delete-button="no" query-rows="14" collapse-grouped-columns="yes" auto-adjust="yes">
+          <o-table-paginator page-size-options="14"></o-table-paginator>
+          <o-table-column attr="GO_NAME" title="GOALS_NAMES" content-align="center"></o-table-column>
+          <o-table-column attr="CA_NAME" title="CATEGORIES" content-align="center"></o-table-column>
+          <o-table-column attr="GO_AMOUNT" title="GOAL_LIMIT" type="currency" currency-symbol="€"
+            currency-symbol-position="right" content-align="center"></o-table-column>
+          <o-table-column attr="PERCENTAGE_MOV_TO_GO" title="SPENT_PROGRESS">
+            <app-o-table-column-renderer-totalready></app-o-table-column-renderer-totalready>
+          </o-table-column>
+          <o-table-column attr="TOTAL_EXPENSE" title="GOAL_TOTAL_EXPENSE" type="currency" currency-symbol="€"
+            currency-symbol-position="right"></o-table-column>
+          <o-table-column attr="PERCENTAGE_EXPENSE" title="GOAL_PERCENTAGE_EXPENSE" type="percentage"
+            decimal-separator="," max-decimal-digits="2" thousand-separator=".">
+            <app-o-table-column-renderer-percentage-color></app-o-table-column-renderer-percentage-color>
+          </o-table-column>
+        </o-table>
+      </o-form-layout-manager>
+    </div>
+  </div>
+
+  <!--Chart-->
+  <div class="chart-container">
+    <div class="table-title">
+      <h3>{{'TOTAL_EXPENSES_CATEGORIES' | oTranslate }}</h3>
+    </div>
+    <div class="goal-table">
+      <o-chart fxFlex type="pie" entity="totalExpensesForCategories" service="movements" x-axis="CA_NAME"
+        y-axis="TOTAL_SPENT" [chart-parameters]="chartParameters"></o-chart>
+    </div>
+  </div>
+</div>

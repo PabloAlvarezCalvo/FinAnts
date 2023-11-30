@@ -1,0 +1,56 @@
+.table-chart-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 0px 20px;
+  gap: 20px;
+}
+.table-container,
+.chart-container {
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px 0px rgba(173, 107, 169, 1);
+}
+.goal-table {
+  height: 760px;
+}
+.items-filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0px 20px;
+}
+.inputs-filter {
+  display: flex;
+  gap: 20px;
+}
+.btn-filter {
+  display: flex;
+  gap: 10px;
+  justify-content: end;
+}
+.table-title {
+  position: relative;
+  border-bottom: 2px solid transparent;
+}
+
+.table-title::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(173, 107, 169, 1),
+    rgba(173, 107, 169, 0.5),
+    rgba(173, 107, 169, 1)
+  );
+  border-radius: 10px;
+}
+@media (max-width: 1300px) {
+  .table-chart-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

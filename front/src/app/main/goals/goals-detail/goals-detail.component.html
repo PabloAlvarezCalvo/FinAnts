@@ -1,0 +1,21 @@
+<div mat-dialog-content>
+  <o-form #goalTable class="goals-detail-table formNewGoal text-detail-goals" attr="goalsDetailsTable" service="goals"
+    entity="goalsWithCategoryName" header-actions="U;D" keys="GO_ID" show-header="true" parent-keys="GO_ID"
+    keys-sql-types="INTEGER" label-header="GOAL_DETAIL" show-header-navigation="yes" (onUpdate)="onUpdate()">
+    <o-column>
+      <o-row>
+        <div fxFlex fxLayout="column" fxLayoutAlign="space-around">
+          <div fxLayout="row" fxLayoutAlign="space-around stretch">
+            <o-text-input attr="GO_NAME" label="GOALS_NAME" fxFlex="45" required="yes" max-length="30"></o-text-input>
+            <o-currency-input attr="GO_AMOUNT" label="GOAL" fxFlex="45" required="yes"></o-currency-input>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-around stretch">
+            <o-combo attr="CA_ID" label="CATEGORY" fxFlex="95" service="categories" entity="categoriesExpenses"
+              keys="CA_ID" columns="CA_ID;CA_NAME" visible-columns="CA_NAME" value-column="CA_ID" multiple="false"
+              required="yes" null-selection="false" searchable="true"></o-combo>
+          </div>
+        </div>
+      </o-row>
+    </o-column>
+  </o-form>
+</div>
