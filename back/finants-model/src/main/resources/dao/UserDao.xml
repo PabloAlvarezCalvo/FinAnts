@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JdbcEntitySetup
+    xmlns="http://www.ontimize.com/schema/jdbc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ontimize.com/schema/jdbc http://www.ontimize.com/schema/jdbc/ontimize-jdbc-dao.xsd"
+    catalog="" schema="${mainschema}" table="TUSER"
+    datasource="mainDataSource" sqlhandler="dbSQLStatementHandler">
+    <DeleteKeys>
+        <Column>USER_</Column>
+    </DeleteKeys>
+    <UpdateKeys>
+        <Column>USER_</Column>
+    </UpdateKeys>
+    <Queries>
+        <Query id="default">
+            <ValidColumns>
+                <Column>USER_</Column>
+                <Column>PASSWORD</Column>
+                <Column>NAME</Column>
+                <Column>SURNAME</Column>
+                <Column>EMAIL</Column>
+                <Column>NIF</Column>
+                <Column>USERBLOCKED</Column>
+                <Column>LASTPASSWORDUPDATE</Column>
+                <Column>FIRSTLOGIN</Column>
+            </ValidColumns>
+            <Sentence>
+                <![CDATA[
+                    SELECT
+                        #COLUMNS#
+                    FROM
+                        ${mainschema}.TUSER
+                    #WHERE#
+                ]]>
+            </Sentence>
+        </Query>    
+        <Query id="login">
+            <ValidColumns>
+                <Column>USER_</Column>
+                <Column>EMAIL</Column>
+                <Column>PASSWORD</Column>
+                <Column>NAME</Column>
+                <Column>SURNAME</Column>
+            </ValidColumns>
+            <Sentence>
+                <![CDATA[
+                    SELECT 
+                        #COLUMNS#
+                    FROM                        
+                        ${mainschema}.TUSER
+                    #WHERE#
+                ]]>
+            </Sentence>
+        </Query>
+        <Query id="balance">
+            <Sentence>
+                <![CDATA[
+                WITH USER_BALANCE AS
+                (
+                 SELECT
+                    SUM(e.EX_AMOUNT) EX_TOTAL,
+                    SUM(i.IN_AMOUNT) IN_TOTAL,
+                    SUM(i.IN_AMOUNT)- SUM(e.EX_AMOUNT) as BALANCE,
+                    EXTRACT(MONTH FROM EX_DATE) AS EX_MONTH,
+                    EXTRACT(MONTH FROM IN_DATE) AS IN_MONTH,
+                    EXTRACT(YEAR FROM EX_DATE) AS EX_YEAR,
+                    EXTRACT(YEAR FROM IN_DATE)AS IN_YEAR,
+                    e.USER_
+                 FROM EXPENSES e
+                 LEFT JOIN INCOMES i ON e.USER_ = i.USER_
+                 GROUP BY
+                   e.USER_,
+                    EXTRACT(MONTH FROM EX_DATE),
+                    EXTRACT(MONTH FROM IN_DATE),
+                    EXTRACT(YEAR FROM EX_DATE),
+                    EXTRACT(YEAR FROM IN_DATE)
+                 )
+                 SELECT
+                   #COLUMNS#
+                 FROM
+                    USER_BALANCE
+                 #WHERE#
+                ]]>
+            </Sentence>
+        </Query>
+
+        <Query id="getTotalExpensesForCurrentMounth">
+            <Sentence>
+                <![CDATA[
+                WITH TOTAL_EXPENSES AS
+                (
+                SELECT
+                SUM(EX_AMOUNT) AS BALANCE,
+                USER_,
+                EXTRACT(MONTH FROM EX_DATE) as  EX_MONTH,
+                 EXTRACT(YEAR FROM EX_DATE) as EX_YEAR
+                FROM
+                EXPENSES
+                GROUP BY
+                USER_,
+                EXTRACT(MONTH FROM EX_DATE),
+                EXTRACT(YEAR FROM EX_DATE)
+
+                )
+                SELECT
+                   #COLUMNS#
+                 FROM
+                    TOTAL_EXPENSES
+                 #WHERE#
+
+        ]]>
+            </Sentence>
+        </Query>
+
+        <Query id="getTotalIncomesForCurrentMounth">
+            <Sentence>
+                <![CDATA[
+                    WITH TOTAL_INCOMES AS
+                    (
+                        SELECT
+                            SUM(IN_AMOUNT) AS BALANCE,
+                            USER_,
+                            EXTRACT(MONTH FROM IN_DATE) as  IN_MONTH,
+                            EXTRACT(YEAR FROM IN_DATE) as IN_YEAR
+                        FROM
+                            INCOMES
+                        GROUP BY
+                            USER_,
+                            EXTRACT(MONTH FROM IN_DATE),
+                            EXTRACT(YEAR FROM IN_DATE)
+
+                    )
+                    SELECT
+                       #COLUMNS#
+                     FROM
+                        TOTAL_INCOMES
+                     #WHERE#
+                ]]>
+            </Sentence>
+        </Query>
+        <Query id="availableUsersForGroup">
+            <Sentence>
+                <![CDATA[
+                    WITH GROUP_USERS AS (
+                        SELECT
+                            t.USER_
+                        FROM
+                            MEMBER_GROUP mg
+                        INNER JOIN
+                            TUSER t
+                        ON
+                            t.USER_ = mg.USER_
+                        #WHERE#
+                    ),
+                    AVAILABLE_USERS AS (
+                        SELECT
+                            u.USER_,
+                            u.NAME,
+                            u.SURNAME,
+                            u.EMAIL
+                        FROM
+                            TUSER u
+                        WHERE
+                            u.USER_ NOT IN (
+                                SELECT * FROM GROUP_USERS
+                            )
+                        ORDER BY
+                            u.USER_ ASC
+                    )
+
+                    SELECT #COLUMNS# FROM AVAILABLE_USERS au #ORDER#;
+                ]]>
+            </Sentence>
+        </Query>
+    </Queries>
+</JdbcEntitySetup>
