@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JdbcEntitySetup
+        xmlns="http://www.ontimize.com/schema/jdbc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ontimize.com/schema/jdbc http://www.ontimize.com/schema/jdbc/ontimize-jdbc-dao.xsd"
+        catalog="" schema="${mainschema}" table="GOALS"
+        datasource="mainDataSource" sqlhandler="dbSQLStatementHandler">
+    <DeleteKeys>
+        <Column>GO_ID</Column>
+    </DeleteKeys>
+    <UpdateKeys>
+        <Column>GO_ID</Column>
+    </UpdateKeys>
+    <GeneratedKey>go_id</GeneratedKey>
+    <Queries>
+        <Query id="getGoalsCategoryWithName">
+            <Sentence>
+                <![CDATA[
+                    WITH GOALS_DATA AS (
+                        WITH MOVS AS(
+                        SELECT
+                            ABS(SUM(MOV_AMOUNT)) MOV_AMOUNT,
+                            CA_ID,
+                            USER_,
+                            EXTRACT(MONTH FROM MOV_DATE) AS MOV_MONTH,
+                            EXTRACT(YEAR FROM MOV_DATE) AS MOV_YEAR
+                        FROM
+                            MOVEMENTS
+                        GROUP BY
+                            CA_ID,
+                            USER_,
+                            MOV_MONTH,
+                            MOV_YEAR
+                        )
+                        SELECT
+                            go.*,
+                            ca.CA_NAME ,
+                            movs.MOV_MONTH,
+                            movs.MOV_YEAR,
+                            movs.MOV_AMOUNT,
+                            (movs.MOV_AMOUNT  / go.GO_AMOUNT )  AS SUM_MOV_TO_GO,
+                            (movs.MOV_AMOUNT  / go.GO_AMOUNT ) * 100 AS PERCENTAGE_MOV_TO_GO
+                        FROM
+                            GOALS go
+                        INNER JOIN
+                            categories ca
+                        ON
+                            ca.CA_ID = go.CA_ID
+                        LEFT JOIN
+                            movs
+                        ON
+                            ca.CA_ID = movs.CA_ID
+                            AND movs.user_ = go.user_
+                        WHERE
+                            (movs.MOV_MONTH = EXTRACT(MONTH FROM CURRENT_DATE) AND
+                            movs.MOV_YEAR = EXTRACT(YEAR FROM CURRENT_DATE)) OR
+                            (movs.MOV_AMOUNT IS NULL)
+                    )
+                    SELECT
+                        *
+                    FROM
+                        GOALS_DATA
+                    #WHERE#
+                ]]>
+            </Sentence>
+        </Query>
+        <Query id="goalsWithCategoryName">
+            <AmbiguousColumns>
+                <AmbiguousColumn name="CA_ID" prefix="ca" />
+            </AmbiguousColumns>
+            <Sentence>
+                <![CDATA[
+                    SELECT
+                        #COLUMNS#
+                    FROM
+                        ${mainschema}.GOALS go
+                    LEFT JOIN
+                        ${mainschema}.CATEGORIES ca
+                    ON
+                        go.CA_ID = ca.CA_ID
+                    #WHERE#
+                ]]>
+            </Sentence>
+        </Query>
+    </Queries>
+</JdbcEntitySetup>
