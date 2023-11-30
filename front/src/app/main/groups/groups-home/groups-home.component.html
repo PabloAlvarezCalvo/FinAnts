@@ -1,0 +1,9 @@
+<div class="container-margin group-container">
+  <o-form-layout-manager mode="tab" label-columns="GR_NAME" class="group-table">
+    <o-table class="group-table" #groupsTable attr="groupsTable" service="groups" entity="groupsByMember"
+      keys="GR_ID" columns="GR_ID;GR_NAME;GR_CREATION_DATE" visible-columns="GR_NAME" pagination-controls="yes"
+      query-rows="20" virtual-scroll="yes">
+      <o-table-column attr="GR_NAME" title="GR_GROUPS_NAMES" content-align="center"></o-table-column>
+    </o-table>
+  </o-form-layout-manager>
+</div>

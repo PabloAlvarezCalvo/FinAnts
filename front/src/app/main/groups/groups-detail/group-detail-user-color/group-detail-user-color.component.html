@@ -1,0 +1,6 @@
+<ng-template #templateref let-cellvalue="cellvalue" let-rowvalue="rowvalue">
+  <span *ngIf="rowvalue['USER_'] != username">{{getCellData(cellvalue)}}</span>
+  <span *ngIf="rowvalue['USER_'] == username" style="font-weight: bold; color: black;" fxLayoutAlign="center center">
+    {{getCellData(cellvalue) }}
+  </span>
+</ng-template>

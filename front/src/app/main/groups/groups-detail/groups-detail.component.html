@@ -1,0 +1,75 @@
+<o-form fxFill #groupsTable attr="groupMembersTable" service="groups" entity="group" header-actions="U" keys="GR_ID"
+  show-header="true" parent-keys="GR_ID" keys-sql-types="INTEGER" class="group-detail-table">
+  <div>
+    <o-row>
+      <div fxFlex fxLayout="row" fxLayoutAlign="space-around center">
+        <o-text-input class="text-detail-group" attr="GR_NAME" label="GR_GROUP_NAME_DETAIL" fxFlex="70"
+          content-align="center" read-only="false"></o-text-input>
+        <o-date-input attr="GR_CREATION_DATE" label="GR_CREATION_DATE" fxFlex="25" content-align="center"
+          read-only="true" enabled="no"></o-date-input>
+      </div>
+    </o-row>
+    <h2>{{'GR_BALANCES' | oTranslate}}</h2>
+    <div class="group-details-container">
+      <div class="group-details-table-container">
+        <o-form-layout-manager mode="dialog">
+          <o-form-layout-dialog-options width="880px" height="450px"></o-form-layout-dialog-options>
+          <o-table class="detail-group group-table" #groupsTable attr="memberGroupsTable" service="groups"
+            entity="groupMembersWithBalance" keys="MG_ID" columns="MG_ID;USER_;MEMBER_BALANCE"
+            visible-columns="USER_;MEMBER_BALANCE" parent-keys="GR_ID" pagination-controls="true" query-rows="20"
+            query-on-change="no" virtual-scroll="yes" refresh-button="no" quick-filter="no">
+            <o-table-column attr="MG_ID" title="ID" type="integer" content-align="center"></o-table-column>
+            <o-table-column attr="USER_" title="MG_USER" content-align="center">
+              <app-group-detail-user-color></app-group-detail-user-color>
+            </o-table-column>
+            <!--<o-table-column attr="MG_IS_ADMIN" title="ISADMIN" content-align="center"></o-table-column>-->
+            <o-table-column attr="MEMBER_BALANCE" title="MEMBER_BALANCE"
+              content-align="center"><app-movement-column-renderer></app-movement-column-renderer></o-table-column>
+          </o-table>
+        </o-form-layout-manager>
+      </div>
+      <div class="container-payments">
+        <div class="header-container">
+          <img src="../../../../assets/images/logo/sidenav-closed-60.png" alt="Application logo" class="app-logo">
+          <h2>{{'GR_SETTLE_UP' | oTranslate}}</h2>
+        </div>
+        <div class="payments-content" id="pay_content">
+          <o-list id="myUniqueList" #list attr="settlingList" service="groups" entity="settlingMovements"
+            parent-keys="GR_ID" columns="PAYER;RECIPIENT;AMOUNT" delete-button="no" quick-filter="no"
+            (onDataLoaded)="prepareData($event)" refresh-button="no">
+            <div *ngFor="let payer of list.dataArray">
+              <div class="payer-title" *ngIf="payer.PAYER">
+                {{ payer.PAYER}} {{ 'GR_HAS_TO_PAY' | oTranslate }}:
+              </div>
+              <div *ngFor="let payment of payer.payments">
+                <div class="payment-detail">
+                  {{payment.amount}}€ {{ 'GR_TO' | oTranslate }} {{payment.recipient}}
+                </div>
+              </div>
+            </div>
+          </o-list>
+        </div>
+      </div>
+
+
+    </div>
+    <h2>{{ 'GR_MOVEMENTS' | oTranslate}}</h2>
+    <div class="group-details-table-container" fxLayout="row">
+      <o-table class="detail-group group-table" #groupsTable attr="movementsTable" service="groups"
+        entity="groupMovements" keys="MOV_ID" columns="MOV_ID;MOV_CONCEPT;MOV_AMOUNT;MOV_DATE;CA_ID;USER_;GR_ID"
+        visible-columns="MOV_CONCEPT;MOV_AMOUNT;MOV_DATE;USER_" parent-keys="GR_ID" pagination-controls="true"
+        query-rows="20" query-on-change="yes" virtual-scroll="no" update-button="no" insert-button="no"
+        quick-filter="no">
+        <o-table-column attr="MOV_DATE" title="DATE" type="date" format="L"></o-table-column>
+        <o-table-column attr="USER_" title="MG_USER" content-align="center">
+          <app-group-detail-user-color></app-group-detail-user-color>
+        </o-table-column>
+        <o-table-column attr="MOV_CONCEPT" title="MOV_CONCEPT" content-align="center"></o-table-column>
+        <o-table-column attr="MOV_AMOUNT" title="MOV_AMOUNT" content-align="center" type="currency" currency-symbol="€"
+          currency-symbol-position="right">
+          <app-movement-column-renderer></app-movement-column-renderer>
+        </o-table-column>
+      </o-table>
+    </div>
+  </div>
+</o-form>
