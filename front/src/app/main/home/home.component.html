@@ -1,0 +1,45 @@
+<div fxFlex fxLayout="column" fxLayoutGap="20px" class="container-margin ">
+  <div class="cont-balance">
+    <div fxFlex class="box-balance" [appBalanceBoxShadow]="balance">
+      <p class="mat-body-strong">{{MONTHLY_BALANCE | oTranslate}} <span>{{ACTUAL_MONTH}}</span></p>
+      <div fxLayout="column" fxLayoutAlign="end end">
+        <div class=" balance" [appBalanceColor]="balance">
+          <p>{{TOTAL_BALANCE | oTranslate}}: </p>
+          <p>{{balance}}€</p>
+        </div>
+        <div fxLayout="row" class="balances-container">
+          <div class="text">
+            <p fxLayoutAlign="end center" class="button-expense-color">{{TOTAL_EXPENSE| oTranslate}}: </p>
+            <p fxLayoutAlign="end center" class="button-income-color">{{TOTAL_INCOME| oTranslate}}: </p>
+          </div>
+          <div class="text numbers-expenses">
+            <p fxLayoutAlign="end center" class="button-expense-color">{{expenseBalance}}€</p>
+            <p fxLayoutAlign="end center" class="button-income-color">{{incomeBalance}}€</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div fxFlex fxLayout.lt-lg="column" fxLayout.gt-md="row" fxLayoutGap="20px">
+    <div fxFlex fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="stretch">
+      <div fxLayoutAlign="center">
+        <o-button (click)="buttonExpenses()" attr="stroked4" type="STROKED" label="ADD_EXPENSES" layout-padding
+          class="btn-expenses" svg-icon="ontimize:add_circle_red" icon-position="right"></o-button>
+      </div>
+      <div class="expense-table">
+        <app-expenses-chart></app-expenses-chart>
+      </div>
+    </div>
+    <div fxFlex fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="stretch">
+      <div fxLayoutAlign="center">
+        <o-button (click)="buttonIncomes()" attr="stroked4" type="STROKED" label="ADD_INCOMES" layout-padding
+          class="btn-incomes" svg-icon="ontimize:add_circle_green" icon-position="right">
+        </o-button>
+      </div>
+      <div class="income-table">
+        <app-incomes-chart></app-incomes-chart>
+      </div>
+    </div>
+  </div>
+</div>

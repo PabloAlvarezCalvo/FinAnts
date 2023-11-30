@@ -1,0 +1,87 @@
+:root {
+  --var-primary-color: #91c09e;
+
+  --var-accent-color: #f75e50;
+}
+
+.cont-balance {
+  max-width: 20%;
+  min-width: 400px;
+  flex-wrap: nowrap;
+}
+
+.body-container {
+  padding: 10px;
+}
+
+.box-balance {
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.box-balance p {
+  margin: 10px;
+}
+
+.btn-incomes {
+  background-color: rgba(145, 192, 158, 0.2);
+  border: 1px solid rgba(145, 192, 158, 0.2);
+  box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.btn-expenses {
+  background-color: rgba(247, 94, 80, 0.2);
+  border: 1px solid rgba(247, 94, 80, 0.2);
+  box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+.balances-container {
+  width: 172px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.text {
+  width: 100%;
+  height: 40px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+}
+.text p {
+  height: 20px;
+  margin: 0;
+  padding: 0;
+}
+.numbers-expenses p {
+  margin-right: 10px;
+}
+
+.balance {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  border-radius: 0;
+  border-bottom: 1px solid #91c09e;
+}
+.button-expense-color {
+  color: #f75e50;
+}
+.button-income-color {
+  color: green;
+}
+.expense-table {
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px 0 rgba(192, 145, 145, 1);
+}
+.income-table {
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px 0 rgba(145, 192, 158, 1);
+}
+.box-balance span {
+  font-weight: bold;
+}
