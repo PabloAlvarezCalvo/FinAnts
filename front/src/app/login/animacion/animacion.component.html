@@ -1,0 +1,20 @@
+<div class="image-container">
+  <ng-container *ngIf="!showImage; else hiddenImage">
+    <img src="../../../assets/images/logo/login-logo.png" alt="ANT_LOGO" />
+    <img
+      #leftEye
+      src="../../../assets/images/logo/left-eye.png"
+      alt="LEFT_EYE"
+      class="left-eye"
+    />
+    <img
+      #rightEye
+      src="../../../assets/images/logo/right-eye.png"
+      alt="RIGHT_EYE"
+      class="right-eye"
+    />
+  </ng-container>
+  <ng-template #hiddenImage>
+    <img class="hidden-image" [src]="currentImage" alt="Hidden Image" />
+  </ng-template>
+</div>
